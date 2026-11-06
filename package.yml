@@ -1,0 +1,18 @@
+package: community.lazycat.app.screego
+name: Screego
+version: 0.0.0
+description: "Screen sharing for developers: low-latency WebRTC screen sharing with rooms and a built-in web UI."
+min_os_version: "1.5.0"
+homepage: https://github.com/screego/server
+author: screego
+license: GPL-3.0
+permissions:
+  required:
+    - net.internet
+locales:
+  zh:
+    name: Screego
+    description: "多人低延迟屏幕共享服务器：基于 WebRTC，自带房间与 Web 界面，适合局域网演示与结对编程。"
+  en:
+    name: Screego
+    description: "Screen sharing for developers: low-latency WebRTC screen sharing with rooms and a built-in web UI."

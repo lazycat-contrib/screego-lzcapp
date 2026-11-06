@@ -1,0 +1,82 @@
+application:
+  subdomain: screego
+  multi_instance: false
+  # Screego has a login system but no self-registration route (accounts are
+  # only created via the `screego hash` CLI); keep it behind the platform
+  # login gate (no public_path).
+  upstreams:
+    - location: /package-licenses/
+      backend: file:///lzcapp/pkg/content/licenses/
+    - location: /
+      backend: http://screego:5050/
+  ingress:
+    - protocol: udp
+      port: 3478
+      service: screego
+    - protocol: udp
+      port: 50000
+      service: screego
+    - protocol: udp
+      port: 50001
+      service: screego
+    - protocol: udp
+      port: 50002
+      service: screego
+    - protocol: udp
+      port: 50003
+      service: screego
+    - protocol: udp
+      port: 50004
+      service: screego
+    - protocol: udp
+      port: 50005
+      service: screego
+    - protocol: udp
+      port: 50006
+      service: screego
+    - protocol: udp
+      port: 50007
+      service: screego
+    - protocol: udp
+      port: 50008
+      service: screego
+    - protocol: udp
+      port: 50009
+      service: screego
+    - protocol: udp
+      port: 50010
+      service: screego
+
+services:
+  screego:
+    # upstream: screego/server:1.12.6
+    image: docker.1ms.run/screego/server:1.12.6
+    environment:
+      - TZ=Asia/Shanghai
+      - SCREEGO_SERVER_ADDRESS=0.0.0.0:5050
+      - SCREEGO_SERVER_TLS=false
+      - SCREEGO_TURN_ADDRESS=0.0.0.0:3478
+      - SCREEGO_TURN_PORT_RANGE=50000:50010
+      - SCREEGO_EXTERNAL_IP={{ .U.external_ip }}
+      - SCREEGO_SECRET={{ printf "%x" (stable_secret "screego_secret") }}
+      - SCREEGO_AUTH_MODE=turn
+
+usage: |
+  Screego 是一个面向多人的屏幕共享（Screen Sharing）服务器，
+  基于 WebRTC，在局域网内延迟极低，自带 Web 界面与房间机制。
+
+  使用方法：
+  1. 部署时需要填写「外网/局域网 IP」参数：填懒猫微服网关在局域网中的 IP
+     （就是你浏览器访问懒猫后台用的那个 IP）。Screego 的 TURN 中继服务
+     必须知道这个地址，留空会导致应用无法启动。
+  2. 打开应用，创建房间并把房间链接发给同一局域网内的同事即可开始共享屏幕。
+  3. TURN 服务（UDP 3478 与 50000-50010）由服务直接监听、不经平台入口转发，
+     需在防火墙自行放行这些 UDP 端口。
+
+  说明：
+  - Screego 支持账号登录（AUTH_MODE=turn，仅 TURN 中继需要登录），
+    但上游没有自助注册入口，账号只能用 `screego hash` 命令生成后写入
+    用户文件；不登录也可正常创建房间共享屏幕。因此未开放 public_path，
+    Web 界面由懒猫平台登录鉴权保护。
+  - UDP 端口用于 WebRTC 媒体中继，请勿把它们暴露到不受信任的网络。
+  - 未做实机验证：房间创建、屏幕共享与 TURN 中继均未在设备上实测。

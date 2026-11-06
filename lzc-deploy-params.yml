@@ -1,0 +1,7 @@
+params:
+  - id: external_ip
+    type: string
+    name: 外网/局域网 IP
+    description: "客户端用来访问懒猫微服网关的 IP（局域网内通常填网关 IP，例如 192.168.1.10）。Screego 的 TURN 中继必需，留空应用无法启动。多个 IP 用英文逗号分隔。"
+    default_value: ""
+    optional: false
