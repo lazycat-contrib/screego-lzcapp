@@ -1,6 +1,6 @@
 package: community.lazycat.app.screego
 name: Screego
-version: 0.0.0
+version: 1.12.6
 description: "Screen sharing for developers: low-latency WebRTC screen sharing with rooms and a built-in web UI."
 min_os_version: "1.5.0"
 homepage: https://github.com/screego/server
